@@ -74,7 +74,7 @@ needed. The Dot must be on Wi-Fi.
    Hammie. The answer ends with `>ok`, or with `>err …` when something was refused.
 
 **Update to a newer Hammie:** type the same `assets_update` line again. The Dot downloads the
-files that changed. With method A, copy the new `pack/` onto the card again.
+new pack. With method A, copy the new `pack/` onto the card again.
 
 **Back to Kody:** the same command without `arg`. It installs Kode's official pack again:
 
