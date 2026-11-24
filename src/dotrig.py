@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import hamorig as H  # noqa: E402
 
 FPS = 30
-SAMPLE = 15                      # poses per second taken from the role functions
+SAMPLE = 10                      # poses per second taken from the role functions
 INK = [0.11, 0.11, 0.11, 1]
 WHITE = [1, 1, 1, 1]
 LENS = [0.965, 0.51, 0.114, 1]
@@ -139,6 +139,24 @@ def layer_ks(p, a, s=(100, 100), r=0, o=100):
             "p": v3(p), "a": v3(a), "s": s if isinstance(s, dict) else st(list(s) + [100])}
 
 
+def rdp(pts, eps):
+    """Douglas-Peucker on a closed polygon."""
+    def go(a):
+        if len(a) < 3:
+            return a
+        (x0, y0), (x1, y1) = a[0], a[-1]
+        L = max(1e-9, math.hypot(x1 - x0, y1 - y0))
+        d = [abs((x1 - x0) * (y0 - y) - (x0 - x) * (y1 - y0)) / L for x, y in a[1:-1]]
+        k = max(range(len(d)), key=d.__getitem__)
+        if d[k] <= eps:
+            return [a[0], a[-1]]
+        return go(a[:k + 2])[:-1] + go(a[k + 1:])
+    if len(pts) < 4:
+        return pts
+    far = max(range(len(pts)), key=lambda j: (pts[j][0] - pts[0][0]) ** 2 + (pts[j][1] - pts[0][1]) ** 2)
+    return go(pts[:far + 1])[:-1] + go(pts[far:] + [pts[0]])[:-1]
+
+
 # ---------------------------------------------------------------- the drawing
 class Drawing:
     def __init__(self, vec_path):
@@ -157,9 +175,16 @@ class Drawing:
         return list(reversed(self.V[part]["shapes"]))
 
     def border(self, part):
-        """the white sticker edge: the part's ink silhouette (its first group), drawn in white, fattened."""
+        """the white sticker edge: the part's ink silhouette (its first group), coarser (a thick white
+        line hides the difference), drawn in white, fattened."""
         sil = self.V[part]["shapes"][0]
-        paths = [it for it in sil["it"] if it["ty"] == "sh"]
+        paths = []
+        for it in sil["it"]:
+            if it["ty"] != "sh":
+                continue
+            v = rdp(it["ks"]["k"]["v"], self.R(5))
+            if len(v) >= 3:
+                paths.append(poly(v))
         w = self.R(56)
         return [grp(paths + [stroke(WHITE, w), fill(WHITE)])]
 
@@ -385,9 +410,9 @@ def build(D, name):
         P = D.R(*pivot)
         return layer_ks(
             anim(thin([(fr, [round(P[0] + D.R(p.get(dxkey, 0.0)), 1) if dxkey else P[0],
-                             round(P[1] + D.R(p.get(dykey, 0.0) - lift_k * lift(p)), 1), 0]) for fr, p in frames], 0.3)),
+                             round(P[1] + D.R(p.get(dykey, 0.0) - lift_k * lift(p)), 1), 0]) for fr, p in frames], 0.6)),
             P + [0], (100, 100),
-            anim(thin([(fr, round(p.get(rkey, 0.0), 2)) for fr, p in frames], 0.15)))
+            anim(thin([(fr, round(p.get(rkey, 0.0), 1)) for fr, p in frames], 0.3)))
 
     head_ks = part_ks(H.HEAD_PIVOT, "head_r", "head_dx", "head_dy", 1.0)
     scope_ks = part_ks(H.SCOPE_PIVOT, "scope_r", None, "scope_dy", 0.6)
@@ -419,6 +444,8 @@ def build(D, name):
     L.append(layer(hd, "head", eye_groups(D, 0, frames) + eye_groups(D, 1, frames) + mouth_groups(D, frames) + D.shapes("head"),
                    head_ks, parent=fig, op=op))
     L.append(layer(bd, "body", D.shapes("body"), body_ks, parent=fig, op=op))
+    # the edges move with their parts (their own copy of the transform: parenting them to the part
+    # draws them over the body in some players)
     L.append(layer(next(ind), "pliers_edge", D.border("pliers"), pliers_ks, parent=fig, op=op))
     L.append(layer(next(ind), "scope_edge", D.border("scope"), scope_ks, parent=fig, op=op))
     L.append(layer(next(ind), "head_edge", D.border("head"), head_ks, parent=fig, op=op))

@@ -11,8 +11,25 @@ JSON_MAX, FILE_MAX = 96 * 1024, 64 * 1024
 DROP = ("nm", "mn", "ix", "markers")
 
 
+IDENT = {"p": [0, 0], "a": [0, 0], "s": [100, 100], "r": 0, "o": 100}
+
+
+def identity_tr(it):
+    """a group transform that changes nothing: ThorVG treats a group without one the same."""
+    if it.get("ty") != "tr":
+        return False
+    for k, v in it.items():
+        if k == "ty":
+            continue
+        if not isinstance(v, dict) or v.get("a") != 0 or k not in IDENT or v.get("k") != IDENT[k]:
+            return False
+    return True
+
+
 def lean(x):
     if isinstance(x, dict):
+        if x.get("ty") == "gr" and "it" in x:
+            x = dict(x, it=[i for i in x["it"] if not identity_tr(i)])
         return {k: lean(v) for k, v in x.items() if k not in DROP}
     if isinstance(x, list):
         return [lean(v) for v in x]

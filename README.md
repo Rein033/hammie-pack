@@ -14,7 +14,14 @@ loading screen.
 > This is a fan project. It is not made, checked or supported by Kode. Kode, Kode Dot, kodeOS and
 > Kody are names of Kode. Hammie and the sticker he is traced from are Kode's artwork.
 
-![idle](preview/idle.gif) ![joke](preview/joke.gif) ![notice](preview/notice.gif) ![hour](preview/hour.gif)
+| idle | joke |
+|---|---|
+| ![idle](preview/idle.gif) | ![joke](preview/joke.gif) |
+| **notice** | **hour** |
+| ![notice](preview/notice.gif) | ![hour](preview/hour.gif) |
+
+The previews are the real size on the Dot's screen, on black. The other animations are in
+[`preview/`](preview).
 
 ## What is in the pack
 
@@ -106,10 +113,12 @@ cd tools/packcheck && ./build.sh ../../kode-sdk && ./packcheck ../../pack
 
 `src/` holds the tools that made the pack:
 
-1. `vectorize.py` cuts the sticker into four parts (body, head, pliers arm, scope arm), the same
+1. `vectorize2.py` cuts the sticker into four parts (body, head, pliers arm, scope arm), the same
    way the Kode Watch animations do (`hamorig.py`). It reduces each part to the sticker's eight
-   colours and traces them into vector shapes. The result is `hammie_vectors.json`, which is in
-   this repository.
+   colours (`vectorize.py`) and traces them with [vtracer](https://github.com/visioncortex/vtracer)
+   into smooth Bezier shapes. The face is traced at the finest resolution, because the Dot allows
+   only 96 KB of JSON per animation. The result is `hammie_vectors.json`, which is in this
+   repository.
 2. `dotrig.py` turns each part into a layer that turns on its own pivot, over a white sticker edge
    of its own. Eyes, mouth, the scope's screen and the props are vector shapes on top. The poses
    are the Kode Watch's (`hamorig.py`), sampled into keyframes.
@@ -117,13 +126,15 @@ cd tools/packcheck && ./build.sh ../../kode-sdk && ./packcheck ../../pack
    the SHA-256 of each file. It stops if a file is over the Dot's limits.
 
 ```bash
-pip install numpy pillow opencv-python-headless lottie resvg-py
+pip install numpy pillow opencv-python-headless lottie resvg-py vtracer
+python src/vectorize2.py src/hammie_vectors.json --scale 0.6 --s-head 0.85 --s-body 0.45 \
+  --s-pliers 0.6 --s-scope 0.5 --speckle 5 --shade-min 500 --corner 90 --splice 90
 python src/dotrig.py src/hammie_vectors.json build/lottie     # needs the sticker image: see below
-python src/dotpack.py build/lottie pack 2026.11.24.2
-python src/sheet.py build/lottie sheet.png                    # contact sheet of every animation
+python src/dotpack.py build/lottie pack 2026.11.25.1
+python src/preview.py build/lottie preview                    # the GIFs above
 ```
 
-`dotrig.py` and `vectorize.py` read the original sticker image through `hamorig.py`, for the
+`vectorize2.py` and `dotrig.py` read the original sticker image through `hamorig.py`, for the
 pivots and the screen's place. That image is Kode's artwork, so it is not in this repository. Set
 `HAMMIE_REF=/path/to/reference.png` if you have it.
 
