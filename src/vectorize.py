@@ -133,22 +133,29 @@ ALLOWED = {"head": [0, 1, 2, 3], "body": [0, 1, 2, 3, 4, 5], "pliers": [0, 1, 2,
            "scope": [0, 1, 2, 3, 4, 5, 6, 7]}
 # Greys are where the antialiasing of a black line lands: only big pieces of them are kept.
 MIN_AREA_GREY = opt("--min-grey", 60)
+MIN_AREA_DARK = opt("--min-dark", 220)   # dark grey: only the scope's real shading survives
+GROWCUT = int(opt("--grow-cut", 12))     # how far a part's fills reach over its cut edges, reference px
 
 
-def trace(im, pal, off, allowed):
-    """im: the part, cropped and scaled to trace px. Returns Lottie groups, back to front."""
+def trace(im, pal, off, allowed, grown=None):
+    """im: the part, cropped and scaled to trace px. grown: the whole sticker over the part grown past
+    its cut edges, same crop. The ink silhouette is the part's own; the fills reach over the cut, so the
+    seam where a part meets the next is fur over fur, not a black line. Returns Lottie groups, back to front."""
     a = np.asarray(im)
     alpha = (a[:, :, 3] > 128).astype(np.uint8)
+    if grown is not None:
+        a = np.asarray(grown)
+    galpha = (a[:, :, 3] > 128).astype(np.uint8)
     rgb = a[:, :, :3].astype(np.int32)
     sub = pal[allowed].astype(np.int32)
     d = ((rgb[:, :, None, :] - sub[None, None, :, :]) ** 2).sum(-1)
     lab = np.array(allowed)[d.argmin(-1)]
-    lab[alpha == 0] = -1
+    lab[galpha == 0] = -1
     # a 3x3 mode filter takes the antialiasing seams away
     lab = cv2.medianBlur((lab + 1).astype(np.uint8), 3).astype(np.int32) - 1
-    lab[alpha == 0] = -1
+    lab[galpha == 0] = -1
     lab = cv2.medianBlur((lab + 1).astype(np.uint8), 5).astype(np.int32) - 1
-    lab[alpha == 0] = -1
+    lab[galpha == 0] = -1
     groups = []
     # the silhouette in ink: the black outlines and every line between two fills come from it
     sil = cv2.morphologyEx(alpha, cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8))
@@ -161,11 +168,11 @@ def trace(im, pal, off, allowed):
         if i in (4, 5):
             n, cc, st, _ = cv2.connectedComponentsWithStats(m)
             for j in range(1, n):
-                if st[j, cv2.CC_STAT_AREA] < MIN_AREA_GREY:
+                if st[j, cv2.CC_STAT_AREA] < (MIN_AREA_GREY if i == 4 else MIN_AREA_DARK):
                     m[cc == j] = 0
         m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((2, 2), np.uint8))
         if GROW:
-            m = cv2.dilate(m, np.ones((2 * GROW + 1, 2 * GROW + 1), np.uint8)) & alpha
+            m = cv2.dilate(m, np.ones((2 * GROW + 1, 2 * GROW + 1), np.uint8)) & galpha
         ps = contours(m, EPS_FILL)
         if ps:
             groups.append(group(ps, pal[i]))
@@ -180,18 +187,28 @@ def trace(im, pal, off, allowed):
 def main():
     out = sys.argv[1]
     P = H.parts()
+    full = H.cutout()
+    fa = np.asarray(full.getchannel("A")) > 128
     crops = {}
+    size = lambda c: (max(1, round(c.width * SCALE)), max(1, round(c.height * SCALE)))
     for name in PARTS:
         im = getattr(P, name)
-        bb = im.getchannel("A").getbbox()
+        g = None
+        if name != "body":   # the body is the bottom layer: its cuts are under the others
+            pa = (np.asarray(im.getchannel("A")) > 128).astype(np.uint8)
+            gm = (cv2.dilate(pa, np.ones((2 * GROWCUT + 1, 2 * GROWCUT + 1), np.uint8)).astype(bool) & fa)
+            g = full.copy()
+            g.putalpha(Image.fromarray((gm * 255).astype(np.uint8)))
+            bb = g.getchannel("A").getbbox()
+        else:
+            bb = im.getchannel("A").getbbox()
         c = im.crop(bb)
-        c = c.resize((max(1, round(c.width * SCALE)), max(1, round(c.height * SCALE))), Image.LANCZOS)
-        crops[name] = (bb, c)
+        crops[name] = (bb, c.resize(size(c), Image.LANCZOS), g.crop(bb).resize(size(c), Image.LANCZOS) if g else None)
     pal = PALETTE
     res = {"unit": UNIT, "palette": pal.tolist()}
-    for name, (bb, c) in crops.items():
+    for name, (bb, c, g) in crops.items():
         off = (round(bb[0] * SCALE), round(bb[1] * SCALE))
-        res[name] = {"bbox": list(bb), "shapes": trace(c, pal, off, ALLOWED[name])}
+        res[name] = {"bbox": list(bb), "shapes": trace(c, pal, off, ALLOWED[name], g)}
     js = json.dumps(res, separators=(",", ":"))
     open(out, "w").write(js)
     for name in PARTS:

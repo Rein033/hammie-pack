@@ -116,7 +116,7 @@ cd tools/packcheck && ./build.sh ../../kode-sdk && ./packcheck ../../pack
 ```bash
 pip install numpy pillow opencv-python-headless lottie resvg-py
 python src/dotrig.py src/hammie_vectors.json build/lottie     # needs the sticker image: see below
-python src/dotpack.py build/lottie pack 2026.11.24.1
+python src/dotpack.py build/lottie pack 2026.11.24.2
 python src/sheet.py build/lottie sheet.png                    # contact sheet of every animation
 ```
 

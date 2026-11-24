@@ -1,7 +1,7 @@
 {
   "format": 1,
   "name": "Hammie",
-  "version": "2026.11.24.1",
+  "version": "2026.11.24.2",
   "face": {
     "default": "lab",
     "hours": []
@@ -37,17 +37,17 @@
   "goodbye": "bye.json.z",
   "loading": "loading.json.z",
   "sha256": {
-    "wake.json.z": "48445e3452ce998d00984528d23a9fb61a8215db02202b0793f04cbb65f35541",
-    "idle.json.z": "a7bd5f2ad37d8e67dc77111948b01078886814972d401de5d74773b2eabc656a",
-    "look.json.z": "50ab25289e2904adf0181a0538c25a7fc229583062da42262ef8d8be8b6b5b82",
-    "hour.json.z": "106dd2fb350c2de6d6779fe5007323a5f778cd591515cfbdc2e6aa46a06ccd2c",
-    "notice.json.z": "785ba640d0c1460af4c2f415a71641093d5b385e9364729e9366d25f943cc5d9",
-    "charge.json.z": "e65e4b2f4c19247723f37068689a701da1e4349da1a0f24c331ae08cabed8b3e",
-    "joke.json.z": "20992781960be54a51f35dd956444a36917b590b6ff06b83e04dee6c4bfdc88b",
-    "sleep.json.z": "dded80d7d5af24bfd3108b7bff0f49075d1f671794ff2fb42179a6a6155045ea",
-    "doubt.json.z": "6762442a04ca395b4f02e269874379a8ed7670741e1c078d2ee9d5418083fdf0",
-    "work.json.z": "ae5fe877240a94a2f2e57c95a5579e49d42aa2282a76381ea8e06cce0afb0891",
-    "bye.json.z": "09430194b3f6074c4f2f41573a088d78c2a13873a7898279babd79c806335d72",
-    "loading.json.z": "39aaf5d14d3007caf6f3604d8cd6647051daf21e11d73c922fa3dae60ab05b4e"
+    "wake.json.z": "d668faefbd4cf231213fbdaf0b0d436d90772a8902a1d77b3c9951f1daa8054e",
+    "idle.json.z": "67f4195ddaf3b4e25912135d60496bf3f7dffa271387f1019826a80617b039ca",
+    "look.json.z": "bcb535c159d2c6225d89e191ffd317e63646b49187bdcc9ad0f1380682e506f1",
+    "hour.json.z": "52cbce36840aab1a0abe89bf6919174c3e2ff91a712582087cc9cdf818683aa0",
+    "notice.json.z": "d1417f8404b8932a8a41288847ddfe9b5f2b66803f51acbce87d5793f97134b9",
+    "charge.json.z": "8940250c3646cdeb79969b452a5b3b8b88f185378286a8c41d13668057e70a96",
+    "joke.json.z": "d2ba7053c00d59a9910450e0915d13e4990daaed193b968a729fd91a49edaa95",
+    "sleep.json.z": "d232fd84376f317635ac2ce8fb48ba2df0c355acdb14e581446d6a8d7683fe34",
+    "doubt.json.z": "1e94e6e6c155d2ba46f5d9fe2eb6d505d24668e2f48aa0d89ae39ac1342d9e2e",
+    "work.json.z": "cf84ca04ecdea4c412a42a59ce3162b901c2b8b972cd58797c29d2538c894eb3",
+    "bye.json.z": "2b6798f3ddcb6841674ddc56e4faada40e2140a35d7881786cbd0ac27b9bf8eb",
+    "loading.json.z": "aa02a21b7afcdcda3bfd5febaa167bcd89195b7bc23d2e8fa60f463b948351f5"
   }
 }
