@@ -4,7 +4,7 @@ Hammie is one avatar. With **Kode Avatar** you make your own: a cat, a robot, yo
 An AI chat (Claude or ChatGPT) draws each animation as a Lottie file. The Kode Avatar app checks
 each file against kodeOS's own rules and packs them into a face pack for the Kode Dot.
 
-**Open the app: <https://rein033.github.io/hammie-pack/app/>**
+**Open the app: <https://rein033.github.io/kode-avatar/app/>**
 
 Everything runs in your browser. Nothing is uploaded. Your work is kept in the browser until you
 press *Clear all*.
@@ -97,7 +97,7 @@ rest later.
 ## Share your avatar
 
 Made something nice? Put it in a public repository with the `kode` files and a GIF, and open an
-issue in [hammie-pack](https://github.com/Rein033/hammie-pack/issues) with the link. Please do
+issue in [kode-avatar](https://github.com/Rein033/kode-avatar/issues) with the link. Please do
 not share avatars of real people without their permission, or of characters you do not own.
 
 ## For developers

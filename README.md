@@ -6,7 +6,7 @@ from the original sticker. An avatar takes Kody's place on the face, the empty l
 
 ## Make your own avatar
 
-**[Open the Kode Avatar app](https://rein033.github.io/hammie-pack/app/)** · [step-by-step guide](docs/AVATAR.md)
+**[Open the Kode Avatar app](https://rein033.github.io/kode-avatar/app/)** · [step-by-step guide](docs/AVATAR.md)
 
 1. Describe your character.
 2. For each animation, copy the ready-made prompt into **Claude** or **ChatGPT**.
@@ -90,7 +90,7 @@ needed. The Dot must be on Wi-Fi.
 2. Type this line and press Enter:
 
    ```
-   function name="assets_update" arg="https://raw.githubusercontent.com/Rein033/hammie-pack/main/pack/kode.json"
+   function name="assets_update" arg="https://raw.githubusercontent.com/Rein033/kode-avatar/main/pack/kode.json"
    ```
 
    The Dot fetches `kode.json` and every file next to it, checks each one, and switches to
