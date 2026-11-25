@@ -1,8 +1,24 @@
-# Hammie face pack
+# Kode Avatar + the Hammie face pack
 
-Hammie, the orange hamster with goggles from the original sticker, as a face pack for the Kode Dot.
-He takes Kody's place on the face, the empty launcher, the "writing" and "goodbye" cards and the
-loading screen.
+Make your own animated avatar for the Kode Dot, or install Hammie, the orange hamster with goggles
+from the original sticker. An avatar takes Kody's place on the face, the empty launcher, the
+"writing" and "goodbye" cards and the loading screen.
+
+## Make your own avatar
+
+**[Open the Kode Avatar app](https://rein033.github.io/hammie-pack/app/)** · [step-by-step guide](docs/AVATAR.md)
+
+1. Describe your character.
+2. For each animation, copy the ready-made prompt into **Claude** or **ChatGPT**.
+3. Paste the answer back. The app plays it and checks it with kodeOS's own pack rules.
+4. Download the face pack and copy it to a microSD card.
+
+Only *Wake up* and *Idle* are needed. It runs in your browser; nothing is uploaded. You can also
+start from Hammie and replace the animations you want.
+
+## Hammie
+
+Hammie is the example avatar, made by hand from the sticker (see [How it is made](#how-it-is-made)).
 
 > [!WARNING]
 > **Not tested on an official Kode Dot yet.** The pack passes kodeOS's own pack checks
@@ -140,6 +156,6 @@ pivots and the screen's place. That image is Kode's artwork, so it is not in thi
 
 ## Licence
 
-The code in `src/` and `tools/` is MIT. The pack, the previews and `hammie_vectors.json` are a
+The code in `app/`, `src/` and `tools/` is MIT. The pack, the previews and `hammie_vectors.json` are a
 trace of Kode's sticker. They are shared here for Kode Dot owners to use on their own device. If
 Kode asks, they come down.
