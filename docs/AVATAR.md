@@ -1,5 +1,7 @@
 # Make your own avatar with Claude or ChatGPT
 
+*English · [Español](AVATAR.es.md)*
+
 Hammie is one avatar. With **Kode Avatar** you make your own: a cat, a robot, yourself as a cartoon.
 An AI chat (Claude or ChatGPT) draws each animation as a Lottie file. The Kode Avatar app checks
 each file against kodeOS's own rules and packs them into a face pack for the Kode Dot.
@@ -102,7 +104,7 @@ not share avatars of real people without their permission, or of characters you 
 
 ## For developers
 
-The app is two files, no build step: [`app/index.html`](../app/index.html) and
-[`app/pack.js`](../app/pack.js). `pack.js` holds the checks (the limits from kodeOS's
+The app is three files, no build step: [`app/index.html`](../app/index.html),
+[`app/pack.js`](../app/pack.js) and [`app/i18n.js`](../app/i18n.js) (English and Spanish texts). `pack.js` holds the checks (the limits from kodeOS's
 `kui_pack.h`), the same JSON shrinking as `src/dotpack.py`, zlib, SHA-256, the manifest and a ZIP
 writer. Its output passes [`tools/packcheck`](../tools/packcheck).

@@ -16,6 +16,19 @@ from the original sticker. An avatar takes Kody's place on the face, the empty l
 Only *Wake up* and *Idle* are needed. It runs in your browser; nothing is uploaded. You can also
 start from Hammie and replace the animations you want.
 
+The app and the guide are in English and Spanish.
+
+### En español: crea tu propio avatar
+
+**[Abre la app Kode Avatar](https://rein033.github.io/kode-avatar/app/?lang=es)** · [guía paso a paso](docs/AVATAR.es.md)
+
+1. Describe tu personaje.
+2. Para cada animación, copia el prompt preparado en **Claude** o **ChatGPT**.
+3. Pega la respuesta. La app la reproduce y la comprueba con las reglas de packs del propio kodeOS.
+4. Descarga el face pack y cópialo a una tarjeta microSD.
+
+Solo *Despertar* y *Reposo* son obligatorias. Funciona en tu navegador; no se sube nada.
+
 ## Hammie
 
 Hammie is the example avatar, made by hand from the sticker (see [How it is made](#how-it-is-made)).

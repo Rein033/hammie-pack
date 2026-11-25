@@ -61,15 +61,18 @@
   .note { background: #241d12; border: 1px solid #5a4320; color: #f3d9b5; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; }
   .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 9px 16px; border-radius: 8px; font-weight: 600; opacity: 0; transition: opacity .2s; pointer-events: none; }
   .toast.show { opacity: 1; }
+  .lang { display: flex; gap: 6px; margin: 0 0 8px; }
+  .lang button.on { background: var(--accent); color: #000; border-color: var(--accent); }
   footer { text-align: center; color: var(--dim); font-size: 13px; padding: 20px; }
 </style>
 </head>
 <body>
 <header>
-  <img src="../preview/idle.gif" alt="Hammie, the example avatar">
+  <img src="../preview/idle.gif" alt="Hammie" >
   <div>
     <h1>Kode <span>Avatar</span></h1>
-    <p>Make your own animated face for the Kode Dot. Describe your character, let Claude or ChatGPT draw each
+    <div class="lang"><button data-lang="en">English</button><button data-lang="es">Español</button></div>
+    <p data-i18n="intro">Make your own animated face for the Kode Dot. Describe your character, let Claude or ChatGPT draw each
       animation as a Lottie file, paste the answers here, and download a face pack the Dot can install.
       Everything runs in your browser; nothing is uploaded.</p>
   </div>
@@ -77,75 +80,76 @@
 
 <main>
   <section>
-    <h2><span class="n">1</span> Your character</h2>
-    <p class="sub">The better you describe it, the more alike the twelve animations come out. Name colours, shapes and one prop.</p>
+    <h2><span class="n">1</span> <span data-i18n="h1">Your character</span></h2>
+    <p class="sub" data-i18n="h1sub">The better you describe it, the more alike the twelve animations come out. Name colours, shapes and one prop.</p>
     <div class="row">
       <div>
-        <label for="name">Avatar name (shown on the Dot, max 31 characters)</label>
-        <input id="name" maxlength="31" placeholder="Pixel the cat">
-        <label for="char">Character</label>
-        <textarea id="char" placeholder="A round grey cat with big green eyes, pink nose, short whiskers and a small yellow headset. Front view, head and upper body, filling most of the screen."></textarea>
+        <label for="name" data-i18n="lname">Avatar name (shown on the Dot, max 31 characters)</label>
+        <input id="name" maxlength="31" data-i18n-ph="phname" placeholder="Pixel the cat">
+        <label for="char" data-i18n="lchar">Character</label>
+        <textarea id="char" data-i18n-ph="phchar" placeholder="A round grey cat with big green eyes, pink nose, short whiskers and a small yellow headset. Front view, head and upper body, filling most of the screen."></textarea>
       </div>
       <div>
-        <label for="style">Style (optional)</label>
-        <textarea id="style" placeholder="Flat vector cartoon, thick dark outlines, 5 solid colours, no gradients, transparent background."></textarea>
-        <label>Open an AI in a new tab</label>
+        <label for="style" data-i18n="lstyle">Style (optional)</label>
+        <textarea id="style" data-i18n-ph="phstyle" placeholder="Flat vector cartoon, thick dark outlines, 5 solid colours, no gradients, transparent background."></textarea>
+        <label data-i18n="lai">Open an AI in a new tab</label>
         <div class="ai">
           <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude</a>
           <a href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
-          <button id="hammie" title="Load the Hammie pack from this repository as a starting point">Start from Hammie</button>
-          <button id="reset">Clear all</button>
+          <button id="hammie" data-i18n="bhammie">Start from Hammie</button>
+          <button id="reset" data-i18n="breset">Clear all</button>
         </div>
       </div>
     </div>
   </section>
 
   <section>
-    <h2><span class="n">2</span> The animations</h2>
-    <p class="sub">For each card: <b>Copy prompt</b> → paste it in Claude or ChatGPT → copy the JSON it answers →
+    <h2><span class="n">2</span> <span data-i18n="h2">The animations</span></h2>
+    <p class="sub" data-i18n="h2sub">For each card: <b>Copy prompt</b> → paste it in Claude or ChatGPT → copy the JSON it answers →
       <b>Paste answer</b>. Make <b>Idle</b> first and keep using the same chat, so the AI reuses the same drawing.
       Only Wake up and Idle are needed; the rest is optional.</p>
     <div class="grid" id="grid"></div>
   </section>
 
   <section>
-    <h2><span class="n">3</span> Download and install</h2>
+    <h2><span class="n">3</span> <span data-i18n="h3">Download and install</span></h2>
     <div class="bar">
-      <button class="main" id="build" disabled>Download face pack (.zip)</button>
+      <button class="main" id="build" disabled data-i18n="bbuild">Download face pack (.zip)</button>
       <span class="progress" id="progress"></span>
     </div>
     <div class="row" style="margin-top:16px">
       <div>
-        <h3 style="margin:0">With a microSD card</h3>
-        <ol class="steps">
+        <h3 style="margin:0" data-i18n="hsd">With a microSD card</h3>
+        <ol class="steps" data-i18n="sdsteps">
           <li>Format the card as FAT32.</li>
           <li>Unzip the download. It holds a folder <code>kode</code>.</li>
           <li>Copy that <code>kode</code> folder to the root of the card, so it holds <code>/kode/kode.json</code>.</li>
           <li>Put the card in the Dot and restart it.</li>
         </ol>
-        <p class="when">Back to Kody: take the card out and restart.</p>
+        <p class="when" data-i18n="sdback">Back to Kody: take the card out and restart.</p>
       </div>
       <div>
-        <h3 style="margin:0">Over Wi-Fi</h3>
-        <ol class="steps">
+        <h3 style="margin:0" data-i18n="hwifi">Over Wi-Fi</h3>
+        <ol class="steps" data-i18n="wifisteps">
           <li>Put the files from the <code>kode</code> folder online, for example in a public GitHub repository.</li>
           <li>Open the Dot's console over USB-C (any serial terminal).</li>
           <li>Type, with the link to <em>your</em> <code>kode.json</code>:</li>
         </ol>
         <pre>function name="assets_update" arg="https://raw.githubusercontent.com/YOU/REPO/main/kode.json"</pre>
-        <p class="when">Back to Kody: <code>function name="assets_update"</code> without <code>arg</code>.</p>
+        <p class="when" data-i18n="wifiback">Back to Kody: <code>function name="assets_update"</code> without <code>arg</code>.</p>
       </div>
     </div>
-    <p class="note">This is a fan tool, not made or supported by Kode. The checks here are kodeOS's own pack rules
+    <p class="note" data-i18n="note">This is a fan tool, not made or supported by Kode. The checks here are kodeOS's own pack rules
       (canvas, size, frame rate, depth), but the preview is drawn by your browser, not by the Dot. A Lottie can look
       right here and still differ on the Dot. Try it first from a card: that is the easiest to undo.</p>
   </section>
 </main>
-<footer>Kode Avatar · <a href="https://github.com/Rein033/kode-avatar">source on GitHub</a> · MIT · Kode, Kode Dot and kodeOS are names of Kode</footer>
+<footer data-i18n="footer">Kode Avatar · <a href="https://github.com/Rein033/kode-avatar">source on GitHub</a> · MIT · Kode, Kode Dot and kodeOS are names of Kode</footer>
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 <script src="pack.js"></script>
+<script src="i18n.js"></script>
 <script>
 "use strict";
 const K = window.KodeAvatar;
@@ -153,6 +157,31 @@ const $ = (s, el = document) => el.querySelector(s);
 const anims = {};            // role.file -> Lottie object
 const players = {};
 const STORE = "kode-avatar-v1";
+const I18N = window.KodeAvatarI18n;
+let lang = "en";
+const t = (k, ...a) => { const m = I18N.dyn[lang][k] ?? I18N.dyn.en[k]; return typeof m === "function" ? m(...a) : m; };
+const EN = {};               // the page's own English, kept to switch back
+
+function setLang(l) {
+  lang = l === "es" ? "es" : "en";
+  K.setLang(lang);
+  document.documentElement.lang = lang;
+  for (const el of document.querySelectorAll("[data-i18n]")) {
+    const k = el.dataset.i18n; if (!(k in EN)) EN[k] = el.innerHTML;
+    el.innerHTML = lang === "es" ? I18N.es[k] ?? EN[k] : EN[k];
+  }
+  for (const el of document.querySelectorAll("[data-i18n-ph]")) {
+    const k = el.dataset.i18nPh; if (!(k in EN)) EN[k] = el.placeholder;
+    el.placeholder = lang === "es" ? I18N.es[k] ?? EN[k] : EN[k];
+  }
+  if (!("title" in EN)) EN.title = document.title;
+  document.title = lang === "es" ? I18N.es.title : EN.title;
+  for (const b of document.querySelectorAll("[data-lang]")) b.classList.toggle("on", b.dataset.lang === lang);
+  try { localStorage.setItem(STORE + "-lang", lang); } catch (e) { /* ignore */ }
+  const grid = $("#grid");
+  if (grid) { for (const p of Object.values(players)) p.destroy(); for (const k in players) delete players[k];
+    grid.innerHTML = ""; for (const r of K.ROLES) grid.appendChild(card(r)); K.ROLES.forEach(refresh); }
+}
 
 function toast(t) { const el = $("#toast"); el.textContent = t; el.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("show"), 1800); }
 function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
@@ -174,24 +203,25 @@ function card(role) {
   const el = document.createElement("div");
   el.className = "card"; el.id = "card-" + role.file;
   const small = role.w !== 410 || role.h !== 334;
+  const tx = K.text(role);
   el.innerHTML = `
-    <h3>${esc(role.title)} <small>${role.w} × ${role.h}</small></h3>
-    <div><span class="tag ${role.need ? "need" : ""}">${role.need ? "needed" : "optional"}</span></div>
-    <p class="when"><b>When:</b> ${esc(role.when)}.</p>
-    <div class="screen" style="aspect-ratio:${role.w}/${role.h}; max-width:${role.w}px"><span class="empty">no animation yet</span><div class="player"></div></div>
+    <h3>${esc(tx.title)} <small>${role.w} × ${role.h}</small></h3>
+    <div><span class="tag ${role.need ? "need" : ""}">${role.need ? t("needed") : t("optional")}</span></div>
+    <p class="when"><b>${t("when")}</b> ${esc(tx.when)}.</p>
+    <div class="screen" style="aspect-ratio:${role.w}/${role.h}; max-width:${role.w}px"><span class="empty">${t("noanim")}</span><div class="player"></div></div>
     <div class="status"></div>
     <div class="btns">
-      <button data-a="prompt">Copy prompt</button>
-      <button data-a="paste">Paste answer</button>
-      <button data-a="file">Upload .json</button>
-      <button data-a="fit" hidden>Fit to canvas</button>
-      ${role.file !== "idle" ? `<button data-a="fromidle">${small ? "Idle, scaled" : "Same as Idle"}</button>` : ""}
-      <button data-a="download" hidden>Save .json</button>
-      <button data-a="remove" hidden>Remove</button>
+      <button data-a="prompt">${t("prompt")}</button>
+      <button data-a="paste">${t("paste")}</button>
+      <button data-a="file">${t("file")}</button>
+      <button data-a="fit" hidden>${t("fit")}</button>
+      ${role.file !== "idle" ? `<button data-a="fromidle">${small ? t("idleScaled") : t("sameIdle")}</button>` : ""}
+      <button data-a="download" hidden>${t("save")}</button>
+      <button data-a="remove" hidden>${t("remove")}</button>
     </div>
     <div class="paste">
-      <textarea class="code" placeholder="Paste the AI's whole answer here. The JSON is found inside it."></textarea>
-      <div class="btns" style="margin-top:6px"><button data-a="use">Use this</button><button data-a="close">Cancel</button></div>
+      <textarea class="code" placeholder="${esc(t("pastePh"))}"></textarea>
+      <div class="btns" style="margin-top:6px"><button data-a="use">${t("use")}</button><button data-a="close">${t("cancel")}</button></div>
     </div>
     <input type="file" accept=".json,application/json" hidden>`;
   el.addEventListener("click", (ev) => { const b = ev.target.closest("button[data-a]"); if (b) act(role, b.dataset.a, el); });
@@ -206,16 +236,16 @@ function act(role, a, el) {
   const paste = $(".paste", el);
   if (a === "prompt") {
     const text = K.prompt(role, $("#char").value, $("#style").value);
-    navigator.clipboard.writeText(text).then(() => toast("Prompt copied — paste it in Claude or ChatGPT"), () => {
-      paste.classList.add("open"); $("textarea", paste).value = text; toast("Copy it from the box");
+    navigator.clipboard.writeText(text).then(() => toast(t("copied")), () => {
+      paste.classList.add("open"); $("textarea", paste).value = text; toast(t("copyBox"));
     });
   } else if (a === "paste") { paste.classList.add("open"); $("textarea", paste).value = ""; $("textarea", paste).focus(); }
   else if (a === "close") paste.classList.remove("open");
   else if (a === "use") { if (setAnim(role, $("textarea", paste).value)) paste.classList.remove("open"); }
   else if (a === "file") $("input[type=file]", el).click();
-  else if (a === "fit") { anims[role.file] = K.fit(anims[role.file], role.w, role.h); refresh(role); toast("Scaled into " + role.w + " × " + role.h); }
+  else if (a === "fit") { anims[role.file] = K.fit(anims[role.file], role.w, role.h); refresh(role); toast(t("scaled", role.w, role.h)); }
   else if (a === "fromidle") {
-    if (!anims.idle) return toast("Make Idle first");
+    if (!anims.idle) return toast(t("idleFirst"));
     const i = anims.idle;
     anims[role.file] = (i.w === role.w && i.h === role.h) ? JSON.parse(JSON.stringify(i)) : K.fit(i, role.w, role.h);
     refresh(role);
@@ -228,10 +258,10 @@ function act(role, a, el) {
 function setAnim(role, text) {
   let a;
   try { a = K.extract(text); } catch (e) {
-    showStatus(role, { ok: false, errors: ["Could not read JSON: " + e.message + ". Was the answer cut off? Ask the AI: \"continue the JSON\" or \"make it shorter\"."], warnings: [] });
+    showStatus(role, { ok: false, errors: [t("readFail", e.message)], warnings: [] });
     return false;
   }
-  if (Array.isArray(a) || typeof a !== "object") { showStatus(role, { ok: false, errors: ["this JSON is not a Lottie animation"], warnings: [] }); return false; }
+  if (Array.isArray(a) || typeof a !== "object") { showStatus(role, { ok: false, errors: [t("notLottie")], warnings: [] }); return false; }
   anims[role.file] = K.tidy(a);
   refresh(role);
   return true;
@@ -241,7 +271,7 @@ function showStatus(role, c) {
   const el = $("#card-" + role.file), st = $(".status", el);
   el.classList.toggle("ok", !!c && c.ok); el.classList.toggle("bad", !!c && !c.ok);
   if (!c) { st.innerHTML = ""; return; }
-  let h = c.ok ? `<span class="o">✓ OK for the Dot</span> <span style="color:var(--dim)">${esc(c.info)}</span>` : `<span class="e">✗ The Dot would refuse this</span>`;
+  let h = c.ok ? `<span class="o">${t("ok")}</span> <span style="color:var(--dim)">${esc(c.info)}</span>` : `<span class="e">${t("refuse")}</span>`;
   const li = [...c.errors.map((e) => `<li class="e">${esc(e)}</li>`), ...c.warnings.map((w) => `<li class="w">${esc(w)}</li>`)];
   if (li.length) h += `<ul>${li.join("")}</ul>`;
   st.innerHTML = h;
@@ -259,7 +289,7 @@ function refresh(role) {
     try {
       players[role.file] = lottie.loadAnimation({ container: $(".player", el), renderer: "svg", loop: true, autoplay: true,
         animationData: JSON.parse(JSON.stringify(a)), rendererSettings: { preserveAspectRatio: "xMidYMid meet" } });
-    } catch (e) { $(".status", el).insertAdjacentHTML("beforeend", `<div class="e">Preview failed: ${esc(e.message)}</div>`); }
+    } catch (e) { $(".status", el).insertAdjacentHTML("beforeend", `<div class="e">${t("previewFail")} ${esc(e.message)}</div>`); }
   }
   summary(); save();
 }
@@ -269,11 +299,11 @@ function summary() {
   for (const r of K.ROLES) if (anims[r.file]) (K.check(anims[r.file], r).ok ? ok++ : bad++);
   const needOk = K.ROLES.filter((r) => r.need).every((r) => anims[r.file] && K.check(anims[r.file], r).ok);
   $("#build").disabled = !needOk || bad > 0;
-  $("#progress").textContent = `${ok} of ${K.ROLES.length} animations ready` + (bad ? `, ${bad} to fix` : "") + (needOk ? "" : " — Wake up and Idle are needed");
+  $("#progress").textContent = t("ready", ok, K.ROLES.length) + (bad ? t("fix", bad) : "") + (needOk ? "" : t("need"));
 }
 
 async function buildPack() {
-  const btn = $("#build"); btn.disabled = true; $("#progress").textContent = "Packing…";
+  const btn = $("#build"); btn.disabled = true; $("#progress").textContent = t("packing");
   try {
     const d = new Date(), p = (n) => String(n).padStart(2, "0");
     const version = `${d.getFullYear()}.${p(d.getMonth() + 1)}.${p(d.getDate())}.${p(d.getHours())}${p(d.getMinutes())}`;
@@ -283,33 +313,34 @@ async function buildPack() {
     const slug = ($("#name").value || "avatar").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "avatar";
     const u = URL.createObjectURL(blob); const l = document.createElement("a"); l.href = u; l.download = slug + "-face-pack.zip"; l.click();
     setTimeout(() => URL.revokeObjectURL(u), 5000);
-    $("#progress").textContent = `Done: ${Object.keys(files).length - 1} animations, version ${version}`;
-  } catch (e) { $("#progress").textContent = "Could not pack: " + e.message; }
+    $("#progress").textContent = t("done", Object.keys(files).length - 1, version);
+  } catch (e) { $("#progress").textContent = t("packFail") + e.message; }
   summary();
 }
 
 async function startFromHammie() {
-  if (Object.keys(anims).length && !confirm("Replace your animations with Hammie's?")) return;
-  $("#progress").textContent = "Loading Hammie…";
+  if (Object.keys(anims).length && !confirm(t("replace"))) return;
+  $("#progress").textContent = t("loadingH");
   try {
     for (const r of K.ROLES) {
       const res = await fetch(`../pack/${r.file}.json.z`); if (!res.ok) throw new Error(r.file + ": " + res.status);
       anims[r.file] = JSON.parse(new TextDecoder().decode(await K.unzlib(new Uint8Array(await res.arrayBuffer()))));
     }
-    if (!$("#name").value) $("#name").value = "My Hammie";
+    if (!$("#name").value) $("#name").value = t("myHammie");
     K.ROLES.forEach(refresh);
-    toast("Hammie loaded — replace any animation you like");
-  } catch (e) { $("#progress").textContent = "Could not load Hammie (open this page from GitHub Pages or a local server): " + e.message; }
+    toast(t("hLoaded"));
+  } catch (e) { $("#progress").textContent = t("hFail") + e.message; }
 }
 
 load();
-const grid = $("#grid");
-for (const r of K.ROLES) grid.appendChild(card(r));
-K.ROLES.forEach(refresh);
+const q = new URLSearchParams(location.search).get("lang");
+let saved = null; try { saved = localStorage.getItem(STORE + "-lang"); } catch (e) { /* ignore */ }
+setLang(q || saved || ((navigator.language || "").toLowerCase().startsWith("es") ? "es" : "en"));
+for (const b of document.querySelectorAll("[data-lang]")) b.addEventListener("click", () => setLang(b.dataset.lang));
 for (const id of ["name", "char", "style"]) $("#" + id).addEventListener("input", save);
 $("#build").addEventListener("click", buildPack);
 $("#hammie").addEventListener("click", startFromHammie);
-$("#reset").addEventListener("click", () => { if (!confirm("Clear the character and all animations?")) return; for (const k of Object.keys(anims)) delete anims[k]; $("#name").value = $("#char").value = $("#style").value = ""; K.ROLES.forEach(refresh); });
+$("#reset").addEventListener("click", () => { if (!confirm(t("clear"))) return; for (const k of Object.keys(anims)) delete anims[k]; $("#name").value = $("#char").value = $("#style").value = ""; K.ROLES.forEach(refresh); });
 </script>
 </body>
 </html>

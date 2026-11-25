@@ -34,6 +34,85 @@
       idea: "a looping spinner made from the character or its prop, centred" },
   ];
 
+  /* Spanish texts for the roles; English is in ROLES itself. */
+  const ROLES_ES = {
+    wake: { title: "Despertar", when: "la cara aparece al encenderse la pantalla",
+      idea: "empieza dormido o fuera de la imagen, abre los ojos y termina en la misma pose neutra exacta del bucle de reposo" },
+    idle: { title: "Reposo (bucle)", when: "la cara, en bucle todo el día",
+      idea: "respiración tranquila, un parpadeo, un pequeño balanceo; el primer y el último fotograma deben ser idénticos para que el bucle no salte" },
+    look: { title: "Te mira", when: "alguien levanta o toca el Dot",
+      idea: "gira la cabeza o los ojos hacia quien mira, sonríe y vuelve a la pose neutra de reposo" },
+    hour: { title: "En punto", when: "cada hora en punto",
+      idea: "muestra un pequeño reloj, toca una campana o mira un reloj de pulsera, y vuelve a la pose neutra de reposo" },
+    notice: { title: "Notificación", when: "llega una notificación",
+      idea: "salta sorprendido, aparece un signo de exclamación o un sobre, y vuelve a la pose neutra de reposo" },
+    charge: { title: "Cargando", when: "se conecta el cable USB",
+      idea: "un rayo o una batería se llena, el personaje se ve con energía, y vuelve a la pose neutra de reposo" },
+    joke: { title: "Broma 1", when: "de vez en cuando, al azar",
+      idea: "se ríe, baila un poco o hace un truco, y vuelve a la pose neutra de reposo" },
+    sleep: { title: "Broma 2", when: "de vez en cuando, al azar",
+      idea: "se queda dormido con zetas flotando, se despierta de golpe, y vuelve a la pose neutra de reposo" },
+    doubt: { title: "Sin apps", when: "el lanzador cuando no hay apps instaladas",
+      idea: "se encoge de hombros o mira alrededor confundido con un signo de interrogación, en bucle" },
+    work: { title: "Instalando", when: "una tarjeta ancha y baja mientras se escribe una app",
+      idea: "el personaje pequeño a la izquierda, trabajando (tecleando, martillando), en bucle" },
+    bye: { title: "Adiós", when: "una tarjeta ancha y baja justo antes de que arranque una app",
+      idea: "el personaje pequeño a la izquierda, diciendo adiós con la mano" },
+    loading: { title: "Cargando app", when: "la pantalla cuadrada de carga",
+      idea: "un indicador de carga en bucle hecho con el personaje o su objeto, centrado" },
+  };
+
+  let LANG = "en";
+  /* Messages the checks and the packer show, in each language. */
+  const MSG = {
+    en: {
+      notLottie: "not a Lottie object",
+      noLayers: "no \"layers\" list: this is not a Lottie animation",
+      canvas: (aw, ah, w, h) => `canvas is ${aw} x ${ah}, must be exactly ${w} x ${h} (use "Fit to canvas")`,
+      fps: (fr) => `frame rate "fr" is ${fr}, must be a whole number 1-60 (30 is best)`,
+      frames: (ip, op) => `frames: ip ${ip} to op ${op} must be whole numbers, 1-1800 frames apart`,
+      precomp: (pc, max) => `precomps nest ${pc === Infinity ? "in a loop" : pc + " deep"}, at most ${max}`,
+      big: (kb) => `${kb} KB of JSON, at most 96 KB: ask for fewer shapes or keyframes`,
+      deep: (d, max) => `JSON nests ${d} deep, at most ${max}: ask for flatter groups`,
+      empty: "no layers: the screen stays black",
+      rExpr: "expressions (JavaScript in the animation) are not run on the Dot",
+      rImg: "image layers: the pack carries no image files, draw with shapes instead",
+      rText: "text layers: fonts are not in the pack, draw letters as shapes instead",
+      rFx: "effects (blur, glow, shadow) are not drawn on the Dot",
+      r3d: "3D layers are drawn flat",
+      rAsset: (p) => `image assets (${p}): draw with shapes instead`,
+      info: (w, h, fr, f, s, kb) => `${w}x${h}, ${fr} fps, ${f} frames (${s} s), ${kb} KB`,
+      noJson: "no JSON found",
+      needed: (t) => `${t} is needed`,
+      stored: (t, kb) => `${t}: ${kb} KB stored, at most 64 KB`,
+    },
+    es: {
+      notLottie: "no es un objeto Lottie",
+      noLayers: "no hay lista \"layers\": esto no es una animación Lottie",
+      canvas: (aw, ah, w, h) => `el lienzo es ${aw} x ${ah}, debe ser exactamente ${w} x ${h} (usa "Ajustar al lienzo")`,
+      fps: (fr) => `la velocidad "fr" es ${fr}, debe ser un número entero de 1 a 60 (30 es lo mejor)`,
+      frames: (ip, op) => `fotogramas: ip ${ip} a op ${op} deben ser números enteros, con 1-1800 fotogramas de diferencia`,
+      precomp: (pc, max) => `las precomposiciones se anidan ${pc === Infinity ? "en un bucle" : pc + " niveles"}, como máximo ${max}`,
+      big: (kb) => `${kb} KB de JSON, como máximo 96 KB: pide menos formas o fotogramas clave`,
+      deep: (d, max) => `el JSON se anida ${d} niveles, como máximo ${max}: pide grupos más planos`,
+      empty: "no hay capas: la pantalla queda negra",
+      rExpr: "las expresiones (JavaScript en la animación) no se ejecutan en el Dot",
+      rImg: "capas de imagen: el pack no lleva imágenes, dibuja con formas",
+      rText: "capas de texto: el pack no lleva fuentes, dibuja las letras como formas",
+      rFx: "los efectos (desenfoque, brillo, sombra) no se dibujan en el Dot",
+      r3d: "las capas 3D se dibujan planas",
+      rAsset: (p) => `imágenes (${p}): dibuja con formas`,
+      info: (w, h, fr, f, s, kb) => `${w}x${h}, ${fr} fps, ${f} fotogramas (${s} s), ${kb} KB`,
+      noJson: "no se encontró JSON",
+      needed: (t) => `${t} es obligatorio`,
+      stored: (t, kb) => `${t}: ${kb} KB guardados, como máximo 64 KB`,
+    },
+  };
+  const T = (k, ...a) => { const m = (MSG[LANG] || MSG.en)[k] ?? MSG.en[k]; return typeof m === "function" ? m(...a) : m; };
+  const setLang = (l) => { LANG = MSG[l] ? l : "en"; };
+  /* A role with its texts in the current language. */
+  const text = (role) => (LANG === "es" ? { ...role, ...ROLES_ES[role.file] } : role);
+
   const LIMIT = { json: 96 * 1024, stored: 64 * 1024, depth: 32, precomp: 2, fps: 60, frames: 1800, text: 31 };
   const DROP = new Set(["nm", "mn", "ix", "markers", "meta", "props"]);
   const IDENT = { p: [0, 0], a: [0, 0], s: [100, 100], r: 0, o: 100 };
@@ -105,16 +184,16 @@
     const walk = (x, inLayer) => {
       if (Array.isArray(x)) return x.forEach((v) => walk(v, inLayer));
       if (!x || typeof x !== "object") return;
-      if (typeof x.x === "string") out.add("expressions (JavaScript in the animation) are not run on the Dot");
-      if (x.ty === 2) out.add("image layers: the pack carries no image files, draw with shapes instead");
-      if (x.ty === 5) out.add("text layers: fonts are not in the pack, draw letters as shapes instead");
-      if (Array.isArray(x.ef) && x.ef.length) out.add("effects (blur, glow, shadow) are not drawn on the Dot");
-      if (x.ddd === 1) out.add("3D layers are drawn flat");
+      if (typeof x.x === "string") out.add(T("rExpr"));
+      if (x.ty === 2) out.add(T("rImg"));
+      if (x.ty === 5) out.add(T("rText"));
+      if (Array.isArray(x.ef) && x.ef.length) out.add(T("rFx"));
+      if (x.ddd === 1) out.add(T("r3d"));
       for (const v of Object.values(x)) walk(v, inLayer);
     };
     walk(root.layers);
     for (const a of root.assets || []) {
-      if (a.p && !a.layers) out.add("image assets (" + (a.p.length > 40 ? a.p.slice(0, 40) + "…" : a.p) + "): draw with shapes instead");
+      if (a.p && !a.layers) out.add(T("rAsset", a.p.length > 40 ? a.p.slice(0, 40) + "…" : a.p));
       if (a.layers) walk(a.layers);
     }
     return [...out];
@@ -128,7 +207,7 @@
     try { return JSON.parse(text); } catch (e) { /* fall through */ }
     const a = text.indexOf("{"), b = text.lastIndexOf("}");
     if (a >= 0 && b > a) return JSON.parse(text.slice(a, b + 1));
-    throw new Error("no JSON found");
+    throw new Error(T("noJson"));
   }
 
   const isWhole = (n, lo, hi) => typeof n === "number" && Number.isInteger(n) && n >= lo && n <= hi;
@@ -136,25 +215,25 @@
   /* Check one animation for a role. Returns {ok, errors[], warnings[], info, bytes}. */
   function check(anim, role) {
     const errors = [], warnings = [];
-    if (!anim || typeof anim !== "object" || Array.isArray(anim)) return { ok: false, errors: ["not a Lottie object"], warnings };
-    if (!Array.isArray(anim.layers)) errors.push("no \"layers\" list: this is not a Lottie animation");
+    if (!anim || typeof anim !== "object" || Array.isArray(anim)) return { ok: false, errors: [T("notLottie")], warnings };
+    if (!Array.isArray(anim.layers)) errors.push(T("noLayers"));
     if (anim.w !== role.w || anim.h !== role.h)
-      errors.push(`canvas is ${anim.w} x ${anim.h}, must be exactly ${role.w} x ${role.h} (use "Fit to canvas")`);
-    if (!isWhole(anim.fr, 1, LIMIT.fps)) errors.push(`frame rate "fr" is ${anim.fr}, must be a whole number 1-60 (30 is best)`);
+      errors.push(T("canvas", anim.w, anim.h, role.w, role.h));
+    if (!isWhole(anim.fr, 1, LIMIT.fps)) errors.push(T("fps", anim.fr));
     const f = anim.op - anim.ip;
     if (!isWhole(anim.ip, 0, 1e6) || !isWhole(anim.op, 0, 1e6) || !(f >= 1 && f <= LIMIT.frames))
-      errors.push(`frames: ip ${anim.ip} to op ${anim.op} must be whole numbers, 1-1800 frames apart`);
+      errors.push(T("frames", anim.ip, anim.op));
     const pc = Array.isArray(anim.layers) ? precompDepth(anim) : 0;
-    if (pc > LIMIT.precomp) errors.push(`precomps nest ${pc === Infinity ? "in a loop" : pc + " deep"}, at most ${LIMIT.precomp}`);
+    if (pc > LIMIT.precomp) errors.push(T("precomp", pc, LIMIT.precomp));
     const text = JSON.stringify(lean(anim));
     const bytes = new TextEncoder().encode(text).length;
     const d = depth(text);
-    if (bytes > LIMIT.json) errors.push(`${(bytes / 1024).toFixed(1)} KB of JSON, at most 96 KB: ask for fewer shapes or keyframes`);
-    if (d > LIMIT.depth) errors.push(`JSON nests ${d} deep, at most ${LIMIT.depth}: ask for flatter groups`);
+    if (bytes > LIMIT.json) errors.push(T("big", (bytes / 1024).toFixed(1)));
+    if (d > LIMIT.depth) errors.push(T("deep", d, LIMIT.depth));
     warnings.push(...risks(anim));
-    if (anim.layers && !anim.layers.length) warnings.push("no layers: the screen stays black");
+    if (anim.layers && !anim.layers.length) warnings.push(T("empty"));
     return { ok: !errors.length, errors, warnings, bytes, text,
-      info: `${anim.w}x${anim.h}, ${anim.fr} fps, ${f} frames (${(f / anim.fr).toFixed(1)} s), ${(bytes / 1024).toFixed(1)} KB` };
+      info: T("info", anim.w, anim.h, anim.fr, f, (f / anim.fr).toFixed(1), (bytes / 1024).toFixed(1)) };
   }
 
   /* Scale an animation into another canvas, centred, by wrapping it in one precomp. */
@@ -196,11 +275,11 @@
     const z = (f) => f + ".json.z";
     for (const role of ROLES) {
       const a = anims[role.file];
-      if (!a) { if (role.need) throw new Error(role.title + " is needed"); continue; }
+      if (!a) { if (role.need) throw new Error(T("needed", text(role).title)); continue; }
       const c = check(a, role);
-      if (!c.ok) throw new Error(role.title + ": " + c.errors[0]);
+      if (!c.ok) throw new Error(text(role).title + ": " + c.errors[0]);
       const data = await zlib(new TextEncoder().encode(c.text));
-      if (data.length > LIMIT.stored) throw new Error(`${role.title}: ${(data.length / 1024).toFixed(1)} KB stored, at most 64 KB`);
+      if (data.length > LIMIT.stored) throw new Error(T("stored", text(role).title, (data.length / 1024).toFixed(1)));
       files[z(role.file)] = data;
       sha[z(role.file)] = await sha256(data);
     }
@@ -234,17 +313,45 @@
     return cat(...parts, cd, cat(le(0x06054b50, 4), le(0, 2), le(0, 2), le(central.length, 2), le(central.length, 2), le(cd.length, 4), le(off, 4), le(0, 2)));
   }
 
-  /* The prompt a person pastes into Claude or ChatGPT for one animation. */
+  /* The prompt a person pastes into Claude or ChatGPT for one animation, in the current language. */
   function prompt(role, character, style) {
-    const ch = String(character || "").trim() || "(describe your character here)";
+    const r = text(role), es = LANG === "es";
+    const loops = role.slot === "loop" || ["doubt", "work", "loading"].includes(role.file);
+    const ch = String(character || "").trim() || (es ? "(describe aquí a tu personaje)" : "(describe your character here)");
+    const st = style && style.trim() ? style.trim() : null;
+    if (es) return [
+      `Haz una animación Lottie (JSON de Bodymovin) para la pantalla de un pequeño aparato, el Kode Dot.`,
+      ``,
+      `Personaje: ${ch}`,
+      `Estilo: ${st || "dibujo vectorial plano, contornos oscuros gruesos, pocos colores sólidos, sobre fondo transparente (la pantalla es negra)."}`,
+      ``,
+      `Esta animación: "${r.title}", se reproduce cuando: ${r.when}.`,
+      `Qué pasa: ${r.idea}.`,
+      ``,
+      `Reglas estrictas (si no, el aparato rechaza el archivo):`,
+      `- "w": ${role.w}, "h": ${role.h} exactamente. Mantén el personaje dentro de este lienzo${role.h === 160 ? " (ancho y bajo: dibújalo pequeño)" : ""}.`,
+      `- "fr": 30, "ip": 0, "op": entre 60 y 150. Solo números enteros.`,
+      `- Todo el JSON por debajo de 90 KB: pocas formas, pocos fotogramas clave, números con 2 decimales como máximo.`,
+      `- Solo capas de forma ("ty": 4) y capas nulas. Sin imágenes, sin capas de texto, sin expresiones, sin efectos, sin 3D.`,
+      `- Como máximo un nivel de precomposiciones; mejor ninguno. Grupos anidados 6 niveles como máximo.`,
+      `- Cada grupo de formas necesita su propio relleno ("fl") y/o trazo ("st") y una transformación ("tr").`,
+      loops ? `- Es un bucle: el último fotograma debe verse exactamente igual que el primero.`
+            : `- Empieza y termina en la misma pose neutra que el bucle de reposo, para que enlace bien.`,
+      `- Mantén el personaje del mismo tamaño y en el mismo sitio que en las demás animaciones del conjunto.`,
+      role.file !== "idle"
+        ? `- Si este chat ya contiene la animación de reposo, reutiliza exactamente sus formas y colores; cambia solo el movimiento.`
+        : `- Construye el personaje con grupos con nombre (cabeza, ojos, boca, cuerpo, brazos) para reutilizarlos en las demás animaciones.`,
+      ``,
+      `Responde solo con el JSON completo, en un único bloque de código \`\`\`json, sin explicación. No lo acortes con "..." en ninguna parte.`,
+    ].join("\n");
     return [
       `Make a Lottie animation (Bodymovin JSON) for the screen of a small gadget, the Kode Dot.`,
       ``,
       `Character: ${ch}`,
-      style && style.trim() ? `Style: ${style.trim()}` : `Style: flat vector cartoon, thick dark outlines, a few solid colours, on a transparent background (the screen is black).`,
+      `Style: ${st || "flat vector cartoon, thick dark outlines, a few solid colours, on a transparent background (the screen is black)."}`,
       ``,
-      `This animation: "${role.title}", played: ${role.when}.`,
-      `What happens: ${role.idea}.`,
+      `This animation: "${r.title}", played when: ${r.when}.`,
+      `What happens: ${r.idea}.`,
       ``,
       `Hard rules (the device refuses the file otherwise):`,
       `- "w": ${role.w}, "h": ${role.h} exactly. Keep the character inside this canvas${role.h === 160 ? " (wide and short: draw it small)" : ""}.`,
@@ -253,9 +360,8 @@
       `- Only shape layers ("ty": 4) and null layers. No images, no text layers, no expressions, no effects, no 3D.`,
       `- At most one level of precomps; better none. Group nesting at most 6 deep.`,
       `- Every shape group needs its own fill ("fl") and/or stroke ("st") and a transform ("tr").`,
-      role.slot === "loop" || ["doubt", "work", "loading"].includes(role.file)
-        ? `- It loops: the last frame must look exactly like the first.`
-        : `- Start and end in the same neutral pose as the idle loop, so it blends back.`,
+      loops ? `- It loops: the last frame must look exactly like the first.`
+            : `- Start and end in the same neutral pose as the idle loop, so it blends back.`,
       `- Keep the character the same size and in the same place as in the other animations of this set.`,
       role.file !== "idle"
         ? `- If this chat already holds the idle animation, reuse its character shapes and colours exactly; change only the motion.`
@@ -265,5 +371,5 @@
     ].join("\n");
   }
 
-  g.KodeAvatar = { ROLES, LIMIT, lean, depth, precompDepth, check, fit, tidy, extract, build, zip, prompt, zlib, unzlib, sha256 };
+  g.KodeAvatar = { ROLES, ROLES_ES, setLang, text, T, LIMIT, lean, depth, precompDepth, check, fit, tidy, extract, build, zip, prompt, zlib, unzlib, sha256 };
 })(typeof window !== "undefined" ? window : globalThis);
